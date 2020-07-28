@@ -11,7 +11,8 @@ namespace EmailTemplate.Web.Models
         public TemplateMap(EntityTypeBuilder<Template> entityBuilder)
         {
             entityBuilder.HasKey(t => t.Id);
-            entityBuilder.Property(t => t.Value).IsRequired();
+            entityBuilder.Property(t => t.Subject).IsRequired();
+            entityBuilder.Property(t => t.Body).IsRequired();
             entityBuilder.Property(t => t.CreatedAt).IsRequired();
         }
     }

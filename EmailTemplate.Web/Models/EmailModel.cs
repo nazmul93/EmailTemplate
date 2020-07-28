@@ -7,6 +7,7 @@ namespace EmailTemplate.Web.Models
 {
     public class EmailModel
     {
+        public string Subject { get; set; }    
         public string HtmlData { get; set; }    
     }
 }

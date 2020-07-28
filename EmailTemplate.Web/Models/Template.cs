@@ -8,7 +8,8 @@ namespace EmailTemplate.Web.Models
     public class Template
     {
         public int Id { get; set; }
-        public string Value { get; set; }
+        public string Subject { get; set; }
+        public string Body { get; set; }
         public DateTime CreatedAt { get; set; } 
     }
 }

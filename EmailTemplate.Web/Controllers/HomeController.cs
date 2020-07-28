@@ -34,7 +34,7 @@ namespace EmailTemplate.Web.Controllers
 
         public IActionResult Email()
         {
-            var template = _context.Template.FirstOrDefault(x => x.Id == 2).Value;
+            var template = _context.Template.FirstOrDefault(x => x.Id == 2).Body;
             //var pathToFile = _env.WebRootPath + Path.DirectorySeparatorChar.ToString()
             //                + "Template" + Path.DirectorySeparatorChar.ToString() + "email-template1.html";
             var subject = "Confirm Account Registration";
@@ -101,7 +101,7 @@ namespace EmailTemplate.Web.Controllers
 
         public IActionResult GetTemplate(int id)    
         {
-            var template = _context.Template.FirstOrDefault(x => x.Id == id).Value;
+            var template = _context.Template.FirstOrDefault(x => x.Id == id).Body;
             var model = new EmailModel
             {
                 HtmlData = template
@@ -118,7 +118,7 @@ namespace EmailTemplate.Web.Controllers
                 var template = new Template
                 {
                     Id = 0,
-                    Value = email.HtmlData,
+                    Body = email.HtmlData,
                     CreatedAt = DateTime.Now
                 };
                 try
