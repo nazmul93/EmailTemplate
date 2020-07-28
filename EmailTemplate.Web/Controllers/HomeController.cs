@@ -32,26 +32,30 @@ namespace EmailTemplate.Web.Controllers
             return View();
         }
 
-        public IActionResult Email()
+        public IActionResult Email(int id)
         {
-            var template = _context.Template.FirstOrDefault(x => x.Id == 2).Body;
-            //var pathToFile = _env.WebRootPath + Path.DirectorySeparatorChar.ToString()
-            //                + "Template" + Path.DirectorySeparatorChar.ToString() + "email-template1.html";
-            var subject = "Confirm Account Registration";
-
+            Template template = null;
+            if (id > 0)
+                template = _context.Template.FirstOrDefault(x => x.Id == id);
+            else
+                template = _context.Template.FirstOrDefault();
+            
+            var heading = "Confirm Account Registration";
+            var date = String.Format("{0:dddd, d MMMM yyyy}", DateTime.Now);
+            
             var builder = new BodyBuilder
             {
-                HtmlBody = template
+                HtmlBody = template.Body
             };
-
             var contact = _context.Contacts.FirstOrDefault(x => x.Id == 1);
+            var name = contact.Name;
 
             string messageBody = string.Format(builder.HtmlBody,
-                subject,
-                String.Format("{0:dddd, d MMMM yyyy}", DateTime.Now),
-                contact.Name);
+                heading, date, name);
+
             var model = new EmailModel
             {
+                Subject = template.Subject,
                 HtmlData = messageBody
             };
             return View(model);
@@ -101,10 +105,15 @@ namespace EmailTemplate.Web.Controllers
 
         public IActionResult GetTemplate(int id)    
         {
-            var template = _context.Template.FirstOrDefault(x => x.Id == id).Body;
+            Template template = null;
+            if (id > 0)
+                template = _context.Template.FirstOrDefault(x => x.Id == id);
+            else
+                template = _context.Template.FirstOrDefault();
             var model = new EmailModel
             {
-                HtmlData = template
+                Subject = template.Subject,
+                HtmlData = template.Body
             };
             return View("Template", model);
         }
@@ -118,9 +127,11 @@ namespace EmailTemplate.Web.Controllers
                 var template = new Template
                 {
                     Id = 0,
+                    Subject = email.Subject,
                     Body = email.HtmlData,
                     CreatedAt = DateTime.Now
                 };
+
                 try
                 {
                     _context.Template.Add(template);
@@ -130,7 +141,7 @@ namespace EmailTemplate.Web.Controllers
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex);
-                    // error logger code
+                    messageBody = template.Body;
                 }
             }
             var model = new EmailModel
